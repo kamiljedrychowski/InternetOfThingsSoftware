@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: communicationServer
+  profiles:
+    active: local
