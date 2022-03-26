@@ -3,3 +3,12 @@ server:
 logging:
   level:
     com.example: trace
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27777
+      database: IOT
+      username: iot
+      password: iot_password

@@ -31,6 +31,10 @@ dependencies {
     api("io.grpc:grpc-kotlin-stub:${project.ext["grpcKotlinVersion"]}")
     api("io.grpc:grpc-stub:${project.ext["grpcVersion"]}")
     runtimeOnly("io.grpc:grpc-netty:${project.ext["grpcVersion"]}")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1")
+
 }
 
 sourceSets {

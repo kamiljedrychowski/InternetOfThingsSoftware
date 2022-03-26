@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27777:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: iot
+      MONGO_INITDB_ROOT_PASSWORD: iot_password
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5421:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  mongodb_data:
+    driver: local

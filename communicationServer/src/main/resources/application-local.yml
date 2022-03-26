@@ -3,3 +3,17 @@ server:
 logging:
   level:
     com.example: trace
+
+spring:
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            statusManager[0].uri: http://localhost:8004
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    enabled: false

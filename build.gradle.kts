@@ -5,6 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.0"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.6.0"
 }
 
 group = "com.iot"
@@ -26,6 +28,12 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
+    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
+
+    allOpen {
+        annotations("javax.persistence.Entity")
+    }
 
     repositories {
         mavenCentral()

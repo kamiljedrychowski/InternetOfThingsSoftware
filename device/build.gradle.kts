@@ -31,6 +31,8 @@ dependencies {
     api("io.grpc:grpc-kotlin-stub:${project.ext["grpcKotlinVersion"]}")
     api("io.grpc:grpc-stub:${project.ext["grpcVersion"]}")
     runtimeOnly("io.grpc:grpc-netty:${project.ext["grpcVersion"]}")
+
+    implementation("com.fazecast:jSerialComm:2.7.0")
 }
 
 sourceSets {
