@@ -1,36 +1,30 @@
 package com.iot.statusmanager.controller
 
+import com.iot.statusmanager.domain.dto.StatusDto
 import com.iot.statusmanager.domain.entities.Status
-import com.iot.statusmanager.domain.repositories.StatusRepository
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
+import com.iot.statusmanager.service.StatusService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/status")
 class StatusController(
-    private val statusRepository: StatusRepository) {
-
-    val log: Logger = LoggerFactory.getLogger(this.javaClass)
+    private val statusService: StatusService
+) {
 
     @PostMapping
-    fun addStatus(@RequestBody status: Status): ResponseEntity<HttpStatus> {
-        statusRepository.save(status)
-        log.info("Saved status: $status")
-        return ResponseEntity.ok().build()
-    }
-
-    @GetMapping("/test")
-    fun test(): ResponseEntity<HttpStatus> {
-        log.info("DZIAłAM~!!!!")
-        return ResponseEntity.ok().build()
-    }
+    fun addStatus(@RequestBody status: StatusDto): ResponseEntity<Status> = ResponseEntity.ok(statusService.saveStatus(status))
 
     @GetMapping
-    fun getAllStatuses(): ResponseEntity<List<Status>> {
-        return ResponseEntity.ok(statusRepository.findAll())
-    }
+    fun getAllStatuses(): ResponseEntity<List<Status>> = ResponseEntity.ok(statusService.getAllStatuses())
+
+    @GetMapping("/{deviceUuid}")
+    fun getAllStatusesByDevice(@PathVariable deviceUuid: UUID): ResponseEntity<List<Status>> =
+        ResponseEntity.ok(statusService.getAllStatusesByDeviceUuid(deviceUuid))
+
+    @GetMapping("/last/{deviceUuid}")
+    fun getLastStatusByDevice(@PathVariable deviceUuid: UUID): ResponseEntity<Status> =
+        ResponseEntity.ok(statusService.getLastStatusByDevice(deviceUuid))
 
 }

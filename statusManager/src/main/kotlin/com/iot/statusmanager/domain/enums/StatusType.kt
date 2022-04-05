@@ -2,5 +2,6 @@ package com.iot.statusmanager.domain.enums
 
 enum class StatusType {
     ON,
-    OFF
+    OFF,
+    THERMOMETER_DETAILS
 }

@@ -11,8 +11,8 @@ import java.util.*
 data class Status(
     @Id
     val id: ObjectId = ObjectId.get(),
-    val createdDate: LocalDateTime = LocalDateTime.now(),
     val statusDate: LocalDateTime?,
     val statusType: StatusType,
-    val deviceUuid: UUID
+    val deviceUuid: UUID,
+    val details: Any
 )
