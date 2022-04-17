@@ -1,12 +1,20 @@
-package com.iot.device
+package com.iot.device.device
 
 import com.fazecast.jSerialComm.SerialPort
 import com.fazecast.jSerialComm.SerialPortDataListener
 import com.fazecast.jSerialComm.SerialPortEvent
+import com.iot.device.device.dto.DeviceStatus
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 
-class SerialPortDataHandler : SerialPortDataListener {
+@Service
+class SerialPortDataHandler (private val deviceStatusService: DeviceStatusService): SerialPortDataListener {
     private val dataRegex = """\d{2}\.\d{2};\d{2}\.\d{2}""".toRegex()
     private var message = ""
+
+    companion object{
+        private val LOGGER = LoggerFactory.getLogger(SerialPortDataHandler::class.java)
+    }
 
     override fun getListeningEvents(): Int {
         return SerialPort.LISTENING_EVENT_DATA_RECEIVED
@@ -14,7 +22,7 @@ class SerialPortDataHandler : SerialPortDataListener {
 
     override fun serialEvent(serialPortEvent: SerialPortEvent) {
         if (serialPortEvent.eventType == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
-            val temp: String = String(serialPortEvent.receivedData)
+            val temp = String(serialPortEvent.receivedData)
             if (temp.contains("\n")) {
                 message += temp
                 processEventData(message.trim())
@@ -27,13 +35,13 @@ class SerialPortDataHandler : SerialPortDataListener {
 
     private fun processEventData(data: String) {
         if (validateData(data)) {
-            println("Data: $data")
+            LOGGER.trace("Data: $data")
         } else {
-            println("Error: Incorrect data!!!")
+            LOGGER.warn("Error: Incorrect data!!!")
             return
         }
-        println("Processing?! ${System.currentTimeMillis()}")
-
+        LOGGER.debug("Processing at ${System.currentTimeMillis()}")
+        deviceStatusService.updateDeviceStatus(DeviceStatus(data).translateData())
     }
 
     private fun validateData(data: String): Boolean {

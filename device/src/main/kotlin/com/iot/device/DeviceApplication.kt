@@ -7,10 +7,5 @@ import org.springframework.boot.runApplication
 class DeviceApplication
 
 fun main(args: Array<String>) {
-    val port = System.getenv("PORT")?.toInt() ?: 50051
-    val server = DeviceGrpcServer(port)
-    server.start()
-    server.blockUntilShutdown()
-
     runApplication<DeviceApplication>(*args)
 }
