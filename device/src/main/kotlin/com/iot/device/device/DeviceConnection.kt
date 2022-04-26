@@ -27,5 +27,4 @@ class DeviceConnection(private val serialPortDataHandler: SerialPortDataHandler)
         LOGGER.info("Connection to device established")
     }
 
-
 }

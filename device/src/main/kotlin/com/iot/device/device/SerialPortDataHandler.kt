@@ -48,5 +48,4 @@ class SerialPortDataHandler (private val deviceStatusService: DeviceStatusServic
         return data.length == 11 && dataRegex.matches(data)
     }
 
-
 }

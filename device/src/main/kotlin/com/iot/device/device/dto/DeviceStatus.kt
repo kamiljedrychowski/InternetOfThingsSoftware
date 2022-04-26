@@ -2,7 +2,7 @@ package com.iot.device.device.dto
 
 import com.iot.device.device.enums.DeviceState
 
-data class DeviceStatus (
+data class DeviceStatus(
     private val data: String
 ) {
     var temperature: Double? = null

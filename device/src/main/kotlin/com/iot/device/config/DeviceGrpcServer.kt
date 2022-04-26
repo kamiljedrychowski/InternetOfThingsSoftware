@@ -1,5 +1,6 @@
-package com.iot.device.grpc
+package com.iot.device.config
 
+import com.iot.device.grpc.DeviceGrpcCommunicationService
 import io.grpc.Server
 import io.grpc.ServerBuilder
 import org.springframework.beans.factory.annotation.Value
