@@ -20,7 +20,7 @@ class DeviceService(
         private val LOGGER = LoggerFactory.getLogger(DeviceService::class.java)
     }
 
-    fun addDevice(deviceDto: DeviceDto): ResponseEntity<HttpStatus> {
+    fun addDevice(deviceDto: DeviceDto): ResponseEntity<Device> {
         if (deviceDto.address.isNullOrBlank() || deviceDto.name.isNullOrBlank() || deviceDto.type == null) {
             LOGGER.error("DeviceDto is invalid $deviceDto")
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
@@ -35,15 +35,16 @@ class DeviceService(
             modifiedDate = LocalDateTime.now(ZoneOffset.UTC)
             type = deviceDto.type
             name = deviceDto.name
-            status = DeviceStatus.DISCONNECTED
+            status = DeviceStatus.NEW
             description = deviceDto.description
             address = deviceDto.address
+            port = deviceDto.port
         }
 
         deviceRepository.save(device)
         LOGGER.debug("Created and saved device: $device")
 
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+        return ResponseEntity.status(HttpStatus.CREATED).body(device)
     }
 
     fun removeDevice(id: Long): ResponseEntity<HttpStatus> {
@@ -72,10 +73,17 @@ class DeviceService(
         return ResponseEntity.ok(deviceRepository.findAllByDeletedIsFalseOrderByName())
     }
 
+    fun getDeviceById(id: Long): ResponseEntity<Device> {
+        val device = deviceRepository.findById(id)
+        if(device.isEmpty) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+        }
+        return ResponseEntity.ok(device.get())
+    }
 
-
-
-
+    fun updateDevice(id: Long): ResponseEntity<HttpStatus> {
+        TODO("Not yet implemented")
+    }
 
 
 }

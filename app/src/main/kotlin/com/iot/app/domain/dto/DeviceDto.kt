@@ -6,5 +6,6 @@ data class DeviceDto (
     var type: DeviceType? = null,
     var name: String? = null,
     var description: String? = null,
-    var address: String? = null
+    var address: String? = null,
+    var port: Int? = null
 )

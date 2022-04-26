@@ -48,13 +48,13 @@ class DeviceClient(
     }
 
     private fun processStatusMessage(message: StatusResponseMessage) {
-        LOGGER.trace("Received statusResponse: $message")
+        LOGGER.debug("Received statusResponse: $message")
         statusManagerFeignClient.addStatus(
             StatusDto(
                 LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(message.ts), ZoneOffset.UTC
                 ),
-                StatusType.DETAILS,
+                StatusType.THERMOMETER_DETAILS,
                 UUID.fromString(message.deviceUuid),
                 ThermometerDetails(message.temperature.toFloat(), message.humidity.toFloat())
             )

@@ -4,9 +4,7 @@ import com.iot.communicationserver.entity.dto.StatusChangeResponseDto
 import com.iot.communicationserver.entity.dto.ThermometerConfigDto
 import com.iot.communicationserver.feign.StatusManagerFeignClient
 import io.grpc.ManagedChannelBuilder
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -49,13 +47,17 @@ class DeviceClientManager(private val statusManagerFeignClient: StatusManagerFei
         return runBlocking { return@runBlocking client.statusChangeRequest(status) }
     }
 
-    fun setConfig(uuid: UUID, config: Any): ResponseEntity<HttpStatus> {
+    suspend fun setConfig(uuid: UUID, config: Any): ResponseEntity<HttpStatus> {
         val client = getClient(uuid) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
-        val thermometerConfigDto: ThermometerConfigDto =
-            config as? ThermometerConfigDto ?: return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
-        MainScope().launch {
-            client.statusRequest(thermometerConfigDto.timeSecondInterval)
-        }
+        var l = 15L
+//        TODO
+//        val thermometerConfigDto: ThermometerConfigDto =
+//            config as? ThermometerConfigDto ?: return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
+
+//            client.statusRequest(10L)
+        GlobalScope.launch {
+            client.statusRequest(l)
+        }//todo przemyśleć jaki scope tutaj powinien być - jak z rzutowaniem typów?
         return ResponseEntity.ok().build()
     }
 

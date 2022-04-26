@@ -24,8 +24,8 @@ class CommunicationController(
     }
 
     //TODO: dorobić automatyczne wysyłanie i zapisywanie configu w głównym czy tutaj baza?! dodatkowa tabela?
-    @PostMapping("/config/{uuid}")
-    fun updateDeviceConfig(@PathVariable uuid: UUID, @RequestBody config: Any): ResponseEntity<HttpStatus> {
+    @PostMapping("/config")
+    suspend fun updateDeviceConfig(@RequestParam uuid: UUID, @RequestBody config: Any): ResponseEntity<HttpStatus> {
         return deviceClientManager.setConfig(uuid, config)
     }
 

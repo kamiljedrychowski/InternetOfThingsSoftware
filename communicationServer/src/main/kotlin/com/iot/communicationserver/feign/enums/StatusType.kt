@@ -1,5 +1,7 @@
 package com.iot.communicationserver.feign.enums
 
 enum class StatusType {
-    DETAILS
+    ON,
+    OFF,
+    THERMOMETER_DETAILS
 }
