@@ -31,3 +31,5 @@ eureka:
     hostname: localhost
   client:
     enabled: false
+
+deviceStatusSchedulerMilliseconds: 300000

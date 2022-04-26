@@ -12,6 +12,9 @@ interface CommunicationServerFeignClient {
     @GetMapping("/communication/connect/{uuid}")
     fun connectDevice(@PathVariable uuid: UUID): ResponseEntity<HttpStatus>
 
+    @GetMapping("/communication/disconnect/{uuid}") //todo implementacja!!!!
+    fun disconnectDevice(@PathVariable uuid: UUID): ResponseEntity<HttpStatus>
+
     @GetMapping("/communication/first-connect")
     fun establishFirstConnectionToDevice(@RequestParam address: String, @RequestParam port: Int): ResponseEntity<UUID>
 

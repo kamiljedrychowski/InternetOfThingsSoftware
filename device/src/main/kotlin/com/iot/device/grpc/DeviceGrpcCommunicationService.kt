@@ -38,7 +38,7 @@ class DeviceGrpcCommunicationService(
         }
         return StatusChangeResponseMessage
             .newBuilder()
-            .setTs(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
+            .setTs(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC))
             .setDeviceUuid(deviceUuid.toString())
             .build()
     }
@@ -58,7 +58,7 @@ class DeviceGrpcCommunicationService(
                 statusResponse = StatusResponseMessage
                     .newBuilder()
                     .setStatus(ERROR)
-                    .setTs(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
+                    .setTs(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC))
                     .setDeviceUuid(deviceUuid.toString())
                     .build()
             } else {

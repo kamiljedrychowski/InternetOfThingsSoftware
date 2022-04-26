@@ -10,10 +10,8 @@ import com.iot.communicationserver.feign.dto.StatusDto
 import com.iot.communicationserver.feign.dto.ThermometerDetails
 import com.iot.communicationserver.feign.enums.StatusType
 import io.grpc.ManagedChannel
-import kotlinx.coroutines.flow.collect
 import org.slf4j.LoggerFactory
 import java.io.Closeable
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -49,12 +47,10 @@ class DeviceClient(
 
     private fun processStatusMessage(message: StatusResponseMessage) {
         LOGGER.debug("Received statusResponse: $message")
-        statusManagerFeignClient.addStatus(
+        statusManagerFeignClient.addStatus(//TODO STATUS JAK JEST BŁĄD!?
             StatusDto(
-                LocalDateTime.ofInstant(
-                    Instant.ofEpochMilli(message.ts), ZoneOffset.UTC
-                ),
-                StatusType.THERMOMETER_DETAILS,
+                LocalDateTime.now(ZoneOffset.UTC),
+                StatusType.THERMOMETER_DETAILS.toString(),
                 UUID.fromString(message.deviceUuid),
                 ThermometerDetails(message.temperature.toFloat(), message.humidity.toFloat())
             )

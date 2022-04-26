@@ -1,6 +1,8 @@
 package com.iot.device.device.dto
 
 import com.iot.device.device.enums.DeviceState
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 data class DeviceStatus(
     private val data: String
@@ -14,7 +16,7 @@ data class DeviceStatus(
         val split = this.data.split(";")
         this.temperature = split[0].toDouble()
         this.humidity = split[1].toDouble()
-        this.timestamp = System.currentTimeMillis()
+        this.timestamp = LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC)
         return this
     }
 
