@@ -14,7 +14,8 @@ class StatusController(
 ) {
 
     @PostMapping
-    fun addStatus(@RequestBody status: StatusDto): ResponseEntity<Status> = ResponseEntity.ok(statusService.saveStatus(status))
+    fun addStatus(@RequestBody status: StatusDto): ResponseEntity<Status> =
+        ResponseEntity.ok(statusService.saveStatus(status))
 
     @GetMapping
     fun getAllStatuses(): ResponseEntity<List<Status>> = ResponseEntity.ok(statusService.getAllStatuses())

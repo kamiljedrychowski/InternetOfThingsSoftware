@@ -24,7 +24,7 @@ class StatusService(
             details = status.details
         )
         entity = statusRepository.save(entity)
-        LOGGER.info("Status saved: $entity")
+        LOGGER.debug("Status saved: $entity")
         return entity
     }
 
@@ -33,6 +33,5 @@ class StatusService(
     fun getAllStatusesByDeviceUuid(deviceUuid: UUID): List<Status>? = statusRepository.findAllByDeviceUuid(deviceUuid)
 
     fun getLastStatusByDevice(deviceUuid: UUID): Status? = statusRepository.findFirstByDeviceUuidOrderByStatusDateDesc(deviceUuid)
-
 
 }

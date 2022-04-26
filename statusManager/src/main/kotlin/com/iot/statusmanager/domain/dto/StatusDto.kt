@@ -1,12 +1,11 @@
 package com.iot.statusmanager.domain.dto
 
-import com.iot.statusmanager.domain.enums.StatusType
 import java.time.LocalDateTime
 import java.util.*
 
 data class StatusDto(
     val statusDate: LocalDateTime?,
-    val statusType: StatusType,
+    val statusType: String,
     val deviceUuid: UUID,
     val details: Any
 )
