@@ -40,7 +40,7 @@ class SerialPortDataHandler (private val deviceStatusService: DeviceStatusServic
             LOGGER.warn("Error: Incorrect data!!!")
             return
         }
-        LOGGER.debug("Processing at ${System.currentTimeMillis()}")
+        LOGGER.trace("Processing at ${System.currentTimeMillis()}")
         deviceStatusService.updateDeviceStatus(DeviceStatus(data).translateData())
     }
 

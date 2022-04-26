@@ -2,7 +2,7 @@ server:
   port: 8002
 logging:
   level:
-    com.example: trace
+    com.iot: debug
 
 spring:
   cloud:

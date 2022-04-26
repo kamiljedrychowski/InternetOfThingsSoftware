@@ -1,6 +1,6 @@
-package com.iot.statusmanager.domain.dto
+package com.iot.app.feign.dto
 
-import com.iot.statusmanager.domain.enums.StatusType
+import com.iot.app.feign.enums.StatusType
 import java.time.LocalDateTime
 import java.util.*
 

@@ -19,7 +19,7 @@ class DeviceGrpcCommunicationService(
     private val deviceStatusService: DeviceStatusService,
     @Value("\${deviceUuid}")
     private val deviceUuid: UUID
-) :DeviceCommunicationGrpcKt.DeviceCommunicationCoroutineImplBase() {
+) : DeviceCommunicationGrpcKt.DeviceCommunicationCoroutineImplBase() {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DeviceGrpcCommunicationService::class.java)
@@ -49,21 +49,23 @@ class DeviceGrpcCommunicationService(
         while (sendingStatus) {
             val recentDeviceStatus = deviceStatusService.getRecentDeviceStatus()
             if (recentDeviceStatus == null) {
-                delay(intervalSeconds)
                 LOGGER.warn("Status not available")
+                delay(intervalSeconds * 1000)
                 continue
             }
+            val value = StatusResponseMessage
+                .newBuilder()
+                .setTemperature(recentDeviceStatus.temperature!!)
+                .setHumidity(recentDeviceStatus.humidity!!)
+                .setStatus(recentDeviceStatus.state!!.toString())
+                .setTs(recentDeviceStatus.timestamp!!)
+                .setDeviceUuid(deviceUuid.toString())
+                .build()
+            LOGGER.debug(value.toString())
             emit(
-                StatusResponseMessage
-                    .newBuilder()
-                    .setTemperature(recentDeviceStatus.temperature!!)
-                    .setHumidity(recentDeviceStatus.humidity!!)
-                    .setStatus(recentDeviceStatus.state!!.toString())
-                    .setTs(recentDeviceStatus.timestamp!!)
-                    .setDeviceUuid(deviceUuid.toString())
-                    .build()
+                value
             )
-            delay(intervalSeconds)
+            delay(intervalSeconds * 1000)
         }
     }
 

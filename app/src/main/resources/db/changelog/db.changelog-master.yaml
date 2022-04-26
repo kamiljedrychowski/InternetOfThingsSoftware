@@ -29,7 +29,7 @@ databaseChangeLog:
                   constraints:
                     nullable: true
                   name: uuid
-                  type: VARCHAR(64)
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -55,6 +55,11 @@ databaseChangeLog:
                     nullable: false
                   name: address
                   type: VARCHAR(250)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: port
+                  type: INTEGER
               - column:
                   constraints:
                     nullable: false

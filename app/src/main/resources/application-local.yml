@@ -18,3 +18,16 @@ spring:
   sql:
     init:
       platform: postgres
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            communicationServer[0].uri: http://localhost:8002
+            statusManager[0].uri: http://localhost:8004
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    enabled: false

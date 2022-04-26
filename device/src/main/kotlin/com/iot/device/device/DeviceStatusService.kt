@@ -19,12 +19,12 @@ class DeviceStatusService {
     fun getRecentDeviceStatus(): DeviceStatus? {
         if (fetched > 25 || deviceState == null || deviceState == DeviceState.ERROR) {
             deviceState = DeviceState.ERROR
-            deviceStatus.apply { deviceState = DeviceState.ERROR }
+            deviceStatus.apply { deviceState = DeviceState.ERROR }// TODO ERRORA TEŻ trzeba jakoś zwracać
             LOGGER.error("Device in error State")
             return null
         }
         fetched++
-        deviceStatus.apply { deviceState = DeviceState.WORKING }
+        deviceStatus!!.apply { state = DeviceState.WORKING }
         return deviceStatus
     }
 

@@ -9,6 +9,7 @@ import java.util.*
 interface DeviceRepository : JpaRepository<Device, Long> {
     //TODO poprawić wszystkie zapytania, żeby było DELETED IS FALSE
 
+    fun findDeviceByIdAndDeletedIsFalse(id: Long): Optional<Device>
 
     fun findDeviceByAddress(address: String) :Device?
 

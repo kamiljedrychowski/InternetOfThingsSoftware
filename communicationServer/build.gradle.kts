@@ -25,6 +25,12 @@ java {
 dependencies {
     api(kotlin("stdlib"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.ext["coroutinesVersion"]}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${project.ext["coroutinesVersion"]}")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${project.ext["coroutinesVersion"]}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${project.ext["coroutinesVersion"]}")
+
+
     api("io.grpc:grpc-protobuf:${project.ext["grpcVersion"]}")
     api("com.google.protobuf:protobuf-java-util:${project.ext["protobufVersion"]}")
     api("com.google.protobuf:protobuf-kotlin:${project.ext["protobufVersion"]}")

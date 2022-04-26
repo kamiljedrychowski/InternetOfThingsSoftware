@@ -2,7 +2,7 @@ server:
   port: 8003
 logging:
   level:
-    com.iot.device: trace
+    com.iot.device: debug
 
 deviceServer: 50051
 deviceUuid: 3834d326-39b5-4812-9bb9-a18bdd6ce27f

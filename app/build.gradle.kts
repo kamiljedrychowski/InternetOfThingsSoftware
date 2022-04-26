@@ -14,4 +14,7 @@ dependencies {
     api("org.postgresql:postgresql")
     api("org.liquibase:liquibase-core:4.8.0")
 
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1")
+
 }
