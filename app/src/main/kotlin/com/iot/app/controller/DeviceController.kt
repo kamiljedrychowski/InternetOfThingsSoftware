@@ -27,12 +27,4 @@ class DeviceController(
     @PutMapping("{id}")
     fun updateDevice(@PathVariable id: Long) = deviceService.updateDevice(id)
 
-
-    //TODO:
-    // - kontrola urządzenia a) włączenie, b) wyłączenie, c) zmiana wysyłanych statusów, d) wysłanie innego configu
-    // - przy pierwszym połączeniu pobierać uuid od urządzenia
-    // - korzystanie z feign do communiactionService
-    //
-    //
-
 }

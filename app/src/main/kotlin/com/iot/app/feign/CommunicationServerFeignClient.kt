@@ -12,7 +12,7 @@ interface CommunicationServerFeignClient {
     @GetMapping("/communication/connect/{uuid}")
     fun connectDevice(@PathVariable uuid: UUID): ResponseEntity<HttpStatus>
 
-    @GetMapping("/communication/disconnect/{uuid}") //todo implementacja!!!!
+    @GetMapping("/communication/disconnect/{uuid}")
     fun disconnectDevice(@PathVariable uuid: UUID): ResponseEntity<HttpStatus>
 
     @GetMapping("/communication/first-connect")
@@ -20,7 +20,5 @@ interface CommunicationServerFeignClient {
 
     @PostMapping("/communication/config")
     fun updateDeviceConfig(@RequestParam uuid: UUID, @RequestBody config: Any): ResponseEntity<HttpStatus>
-
-    //TODO: dodać wszędzie jakies try catche albo jakiś globalny rexception Handler dla feigna
 
 }

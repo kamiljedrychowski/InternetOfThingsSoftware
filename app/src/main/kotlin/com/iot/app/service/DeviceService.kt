@@ -3,6 +3,7 @@ package com.iot.app.service
 import com.iot.app.domain.dto.DeviceDto
 import com.iot.app.domain.entities.Device
 import com.iot.app.domain.enums.DeviceStatus
+import com.iot.app.domain.enums.TurnStatus
 import com.iot.app.domain.repositories.DeviceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -13,7 +14,8 @@ import java.time.ZoneOffset
 
 @Service
 class DeviceService(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    private val deviceConnectionService: DeviceConnectionService
 ) {
 
     companion object {
@@ -25,7 +27,7 @@ class DeviceService(
             LOGGER.error("DeviceDto is invalid $deviceDto")
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
         }
-        val deviceByAddress = deviceRepository.findDeviceByAddress(deviceDto.address!!)
+        val deviceByAddress = deviceRepository.findDeviceByAddressAndDeletedIsFalse(deviceDto.address!!)
         if (deviceByAddress != null) {
             LOGGER.error("Device with this address already exists: $deviceDto")
             return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).build()
@@ -54,7 +56,7 @@ class DeviceService(
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
         if(device.get().status?.equals(DeviceStatus.CONNECTED) == true) {
-            //TODO disconnect device
+            deviceConnectionService.turnDevice(id, TurnStatus.OFF)
             LOGGER.debug("Device disconnected")
         }
 
@@ -81,9 +83,12 @@ class DeviceService(
         return ResponseEntity.ok(device.get())
     }
 
-    fun updateDevice(id: Long): ResponseEntity<HttpStatus> {
-        TODO("Not yet implemented")
+    fun getDeviceByStatusIn(statuses: List<DeviceStatus>): List<Device> {
+        return deviceRepository.findAllByStatusInAndDeletedIsFalse(statuses)
     }
 
+    fun updateDevice(id: Long): ResponseEntity<HttpStatus> {
+        TODO("Not yet implemented - PUT for updating device")
+    }
 
 }

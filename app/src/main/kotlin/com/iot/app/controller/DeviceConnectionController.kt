@@ -13,7 +13,7 @@ class DeviceConnectionController(
 ) {
 
     @GetMapping("/turn/{id}/{turnStatus}")
-    fun connectDevice(@PathVariable id: Long, @PathVariable turnStatus: TurnStatus): ResponseEntity<HttpStatus> =
+    fun turnDevice(@PathVariable id: Long, @PathVariable turnStatus: TurnStatus): ResponseEntity<HttpStatus> =
         deviceConnectionService.turnDevice(id, turnStatus)
 
     @PostMapping("/config/{id}")

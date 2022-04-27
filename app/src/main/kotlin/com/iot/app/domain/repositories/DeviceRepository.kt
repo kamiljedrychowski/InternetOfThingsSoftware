@@ -1,19 +1,18 @@
 package com.iot.app.domain.repositories
 
 import com.iot.app.domain.entities.Device
+import com.iot.app.domain.enums.DeviceStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
 interface DeviceRepository : JpaRepository<Device, Long> {
-    //TODO poprawić wszystkie zapytania, żeby było DELETED IS FALSE
-
     fun findDeviceByIdAndDeletedIsFalse(id: Long): Optional<Device>
 
-    fun findDeviceByAddress(address: String) :Device?
-
-    fun findDeviceByUuid(uuid: UUID): Device?
+    fun findDeviceByAddressAndDeletedIsFalse(address: String) :Device?
 
     fun findAllByDeletedIsFalseOrderByName(): List<Device>
+
+    fun findAllByStatusInAndDeletedIsFalse(deviceStatuses: List<DeviceStatus>): List<Device>
 }
