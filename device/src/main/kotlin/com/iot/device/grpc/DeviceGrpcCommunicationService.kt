@@ -6,6 +6,7 @@ import StatusChangeResponseMessage
 import StatusRequestMessage
 import StatusResponseMessage
 import com.iot.device.device.DeviceStatusService
+import com.iot.device.device.enums.DeviceState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,15 +26,13 @@ class DeviceGrpcCommunicationService(
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DeviceGrpcCommunicationService::class.java)
-        private const val OFF = "OFF"
-        private const val ERROR = "ERROR"
     }
 
     private var sendingStatus: Boolean = false
 
     override suspend fun statusChangeRequest(request: StatusChangeRequestMessage): StatusChangeResponseMessage {
         LOGGER.debug("statusChangeRequest: ${request.status}")
-        if (request.status.equals(OFF)) {
+        if (request.status.equals(DeviceState.OFF.name)) {
             sendingStatus = false
         }
         return StatusChangeResponseMessage
@@ -57,7 +56,7 @@ class DeviceGrpcCommunicationService(
                 LOGGER.warn("Status not available")
                 statusResponse = StatusResponseMessage
                     .newBuilder()
-                    .setStatus(ERROR)
+                    .setStatus(DeviceState.ERROR.name)
                     .setTs(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC))
                     .setDeviceUuid(deviceUuid.toString())
                     .build()
