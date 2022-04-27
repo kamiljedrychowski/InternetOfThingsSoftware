@@ -1,6 +1,6 @@
 package com.iot.communicationserver.controller
 
-import com.iot.communicationserver.grpc.DeviceClientManager
+import com.iot.communicationserver.service.DeviceClientManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,6 +11,7 @@ import java.util.*
 class CommunicationController(
     private val deviceClientManager: DeviceClientManager
 ) {
+
     @GetMapping("/turn/{status}/{uuid}")
     fun turnDevice(@PathVariable status: String, @PathVariable uuid: UUID): ResponseEntity<HttpStatus> {
         deviceClientManager.changeClientStatus(uuid, status)
@@ -23,7 +24,6 @@ class CommunicationController(
         return ResponseEntity.ok(deviceClientManager.addNewClient(address, port))
     }
 
-    //TODO: dorobić automatyczne wysyłanie i zapisywanie configu w głównym czy tutaj baza?! dodatkowa tabela?
     @PostMapping("/config")
     suspend fun updateDeviceConfig(@RequestParam uuid: UUID, @RequestBody config: Any): ResponseEntity<HttpStatus> {
         return deviceClientManager.setConfig(uuid, config)

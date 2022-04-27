@@ -11,6 +11,13 @@ spring:
         simple:
           instances:
             statusManager[0].uri: http://localhost:8004
+  data:
+    mongodb:
+      host: localhost
+      port: 27777
+      database: IOT
+      username: iot
+      password: iot_password
 
 eureka:
   instance:

@@ -41,6 +41,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.1")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1")
 
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.data:spring-data-mongodb")
+
 }
 
 sourceSets {

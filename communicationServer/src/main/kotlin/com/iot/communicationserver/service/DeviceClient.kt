@@ -1,10 +1,10 @@
-package com.iot.communicationserver.grpc
+package com.iot.communicationserver.service
 
 import DeviceCommunicationGrpcKt
 import StatusChangeRequestMessage
 import StatusRequestMessage
 import StatusResponseMessage
-import com.iot.communicationserver.entity.dto.StatusChangeResponseDto
+import com.iot.communicationserver.domain.dto.StatusChangeResponseDto
 import com.iot.communicationserver.feign.StatusManagerFeignClient
 import com.iot.communicationserver.feign.dto.StatusDto
 import com.iot.communicationserver.feign.dto.ThermometerDetails
@@ -17,7 +17,7 @@ import java.time.ZoneOffset
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-//TODO: jako serwis a przechowywać tylko stuby?
+//TODO: As a service? store only stubs?
 class DeviceClient(
     private val channel: ManagedChannel, private val statusManagerFeignClient: StatusManagerFeignClient
 ) : Closeable {

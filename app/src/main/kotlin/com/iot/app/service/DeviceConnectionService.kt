@@ -41,7 +41,7 @@ class DeviceConnectionService(
             ResponseEntity.ok().build()
         } else {
             LOGGER.error("Error during updating config for device with id: $id")
-            ResponseEntity.internalServerError().build()
+            ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
         }
     }
 
@@ -109,7 +109,7 @@ class DeviceConnectionService(
             device.apply { this.uuid = uuid.body; this.status = DeviceStatus.CONNECTED_REQ_CONFIG }
             deviceRepository.save(device)
             LOGGER.debug("Added uuid: ${uuid.body} and status: ${DeviceStatus.CONNECTED_REQ_CONFIG} to device")
-            return ResponseEntity.ok().build()
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build()
         }
         return ResponseEntity.internalServerError().build()
     }

@@ -1,4 +1,4 @@
-package com.iot.communicationserver.entity.dto
+package com.iot.communicationserver.domain.dto
 
 import java.util.*
 
