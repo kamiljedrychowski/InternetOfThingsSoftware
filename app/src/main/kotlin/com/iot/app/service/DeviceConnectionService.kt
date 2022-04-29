@@ -1,5 +1,6 @@
 package com.iot.app.service
 
+import com.iot.app.domain.dto.ChangeClientStatusDto
 import com.iot.app.domain.entities.Device
 import com.iot.app.domain.enums.DeviceStatus
 import com.iot.app.domain.enums.TurnStatus
@@ -21,7 +22,7 @@ class DeviceConnectionService(
     }
 
     fun turnDevice(id: Long, turnStatus: TurnStatus): ResponseEntity<HttpStatus> {
-        return when(turnStatus) {
+        return when (turnStatus) {
             TurnStatus.ON -> turnOnDevice(id)
             TurnStatus.OFF -> turnOffDevice(id)
         }
@@ -34,7 +35,13 @@ class DeviceConnectionService(
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
         val device = deviceEntity.get()
-        return if (communicationServerFeignClient.updateDeviceConfig(device.uuid!!, config).statusCode.is2xxSuccessful) {
+        return if(device.uuid == null) {
+            ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
+        } else if (communicationServerFeignClient.updateDeviceConfig(
+                device.uuid!!,
+                config
+            ).statusCode.is2xxSuccessful
+        ) {
             LOGGER.debug("Updated config for device with id: $id")
             device.status = DeviceStatus.CONNECTED
             deviceRepository.save(device)
@@ -58,7 +65,14 @@ class DeviceConnectionService(
             return establishFirstConnection(device)
         }
 
-        val connectionStatus = communicationServerFeignClient.connectDevice(device.uuid!!)
+        val connectionStatus = communicationServerFeignClient.turnDevice(
+            ChangeClientStatusDto(
+                device.uuid!!,
+                device.address!!,
+                device.port!!,
+                TurnStatus.ON.name
+            )
+        )
         return if (connectionStatus.statusCode == HttpStatus.ACCEPTED) {
             LOGGER.debug("Connection established with device id: ${device.id}")
             LOGGER.warn("Lack of configuration for device id: ${device.id}")
@@ -87,7 +101,15 @@ class DeviceConnectionService(
         val device = deviceEntity.get()
 
         return if (DeviceStatus.connectedStatuses.contains(device.status)) {
-            if(communicationServerFeignClient.disconnectDevice(device.uuid!!).statusCode.is2xxSuccessful) {
+            if (communicationServerFeignClient.turnDevice(
+                    ChangeClientStatusDto(
+                        uuid = device.uuid!!,
+                        newStatus = TurnStatus.OFF.name,
+                        address = device.address,
+                        port = device.port
+                    )
+                ).statusCode.is2xxSuccessful
+            ) {
                 device.status = DeviceStatus.DISCONNECTED
                 deviceRepository.save(device)
                 LOGGER.debug("Device with id $id turned off")

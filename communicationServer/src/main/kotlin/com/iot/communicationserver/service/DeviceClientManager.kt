@@ -1,6 +1,6 @@
 package com.iot.communicationserver.service
 
-import com.iot.communicationserver.domain.dto.StatusChangeResponseDto
+import com.iot.communicationserver.domain.dto.ChangeClientStatusDto
 import com.iot.communicationserver.feign.StatusManagerFeignClient
 import com.iot.communicationserver.feign.enums.StatusType
 import io.grpc.ManagedChannelBuilder
@@ -47,34 +47,44 @@ class DeviceClientManager(
         LOGGER.debug("Client removed for: $uuid")
     }
 
-    fun changeClientStatus(uuid: UUID, status: String): StatusChangeResponseDto? {
-        //todo tutaj zrobić rozłączanie itd?!
-        when(status) {
-            StatusType.ON.name -> onClientStatus(uuid)
-            StatusType.OFF.name -> offClientStatus(uuid)
+    fun changeClientStatus(changeClientStatusDto: ChangeClientStatusDto): ResponseEntity<HttpStatus> {
+        return when(changeClientStatusDto.newStatus) {
+            StatusType.ON.name -> onClientStatus(changeClientStatusDto)
+            StatusType.OFF.name -> offClientStatus(changeClientStatusDto)
+            else -> ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
         }
-
-        val client = getClient(uuid) ?: return null
-        return runBlocking { return@runBlocking client.statusChangeRequest(status) }
     }
 
-    private fun offClientStatus(uuid: UUID) {
-        val client = getClient(uuid) ?: return
+    private fun offClientStatus(changeClientStatusDto: ChangeClientStatusDto): ResponseEntity<HttpStatus> {
+        val client = getClient(changeClientStatusDto.uuid) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         runBlocking { return@runBlocking client.statusChangeRequest(StatusType.OFF.name) }
-        removeClient(uuid)
+        removeClient(changeClientStatusDto.uuid)
+        return ResponseEntity.ok().build()
     }
 
-    private fun onClientStatus(uuid: UUID) {
-        //todo jak włączamy urządzenie i nie ma go zapisanego w lokalnej mapie to przypał, bo potrzebujemy więcej danych żeby się z nim połączyć
-//        addNewClient()
+    private fun onClientStatus(changeClientStatusDto: ChangeClientStatusDto): ResponseEntity<HttpStatus> {
+        addNewClient(changeClientStatusDto.address!!, changeClientStatusDto.port!!)
+        val deviceConfig = deviceConfigurationService.getDeviceConfig(changeClientStatusDto.uuid)
+        val client = getClient(changeClientStatusDto.uuid) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+
+        return if(deviceConfig == null) {
+            ResponseEntity.status(HttpStatus.ACCEPTED).build()
+        } else {
+            //Parsing data only for thermometer
+            val statusInterval: Long = (deviceConfig.details as Map<String, Int>)["timeSecondInterval"]?.toLong()
+                ?: return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
+            GlobalScope.launch {
+                client.statusRequest(statusInterval)
+            }
+            ResponseEntity.ok().build()
+        }
     }
 
-    @SuppressWarnings("unchecked")
     suspend fun setConfig(uuid: UUID, config: Any): ResponseEntity<HttpStatus> {
         val client = getClient(uuid) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         deviceConfigurationService.addOrUpdateDeviceConfig(uuid, config)
 
-        //Parsing data for thermometer
+        //Parsing data only for thermometer
         val statusInterval: Long = (config as Map<String, Int>)["timeSecondInterval"]?.toLong()
             ?: return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
 

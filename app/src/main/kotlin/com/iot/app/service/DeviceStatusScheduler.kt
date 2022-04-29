@@ -21,7 +21,6 @@ class DeviceStatusScheduler(private val deviceService: DeviceService) {
             devices.forEach {
             }
         }
-        //TODO(NOT_IMPLEMENTED)
     }
 
 }

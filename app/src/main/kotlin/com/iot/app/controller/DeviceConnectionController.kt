@@ -12,7 +12,7 @@ class DeviceConnectionController(
     private val deviceConnectionService: DeviceConnectionService
 ) {
 
-    @GetMapping("/turn/{id}/{turnStatus}")
+    @GetMapping("/turn-device/{id}/{turnStatus}")
     fun turnDevice(@PathVariable id: Long, @PathVariable turnStatus: TurnStatus): ResponseEntity<HttpStatus> =
         deviceConnectionService.turnDevice(id, turnStatus)
 

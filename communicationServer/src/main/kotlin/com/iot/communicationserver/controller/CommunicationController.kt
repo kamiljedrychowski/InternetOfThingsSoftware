@@ -1,5 +1,6 @@
 package com.iot.communicationserver.controller
 
+import com.iot.communicationserver.domain.dto.ChangeClientStatusDto
 import com.iot.communicationserver.service.DeviceClientManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,11 +13,9 @@ class CommunicationController(
     private val deviceClientManager: DeviceClientManager
 ) {
 
-    @GetMapping("/turn/{status}/{uuid}")
-    fun turnDevice(@PathVariable status: String, @PathVariable uuid: UUID): ResponseEntity<HttpStatus> {
-        deviceClientManager.changeClientStatus(uuid, status)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
-        return ResponseEntity.ok().build()
+    @PostMapping("/turn-device")
+    fun turnDevice(@RequestBody changeClientStatusDto: ChangeClientStatusDto): ResponseEntity<HttpStatus> {
+        return deviceClientManager.changeClientStatus(changeClientStatusDto)
     }
 
     @GetMapping("/first-connect")

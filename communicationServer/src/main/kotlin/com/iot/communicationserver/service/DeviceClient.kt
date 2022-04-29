@@ -6,6 +6,7 @@ import StatusRequestMessage
 import StatusResponseMessage
 import com.iot.communicationserver.domain.dto.StatusChangeResponseDto
 import com.iot.communicationserver.feign.StatusManagerFeignClient
+import com.iot.communicationserver.feign.dto.GeneralDetails
 import com.iot.communicationserver.feign.dto.StatusDto
 import com.iot.communicationserver.feign.dto.ThermometerDetails
 import com.iot.communicationserver.feign.enums.StatusType
@@ -47,12 +48,16 @@ class DeviceClient(
 
     private fun processStatusMessage(message: StatusResponseMessage) {
         LOGGER.debug("Received statusResponse: $message")
-        statusManagerFeignClient.addStatus(//TODO STATUS JAK JEST BŁĄD!?
+        statusManagerFeignClient.addStatus(
             StatusDto(
                 LocalDateTime.now(ZoneOffset.UTC),
                 StatusType.THERMOMETER_DETAILS.toString(),
                 UUID.fromString(message.deviceUuid),
-                ThermometerDetails(message.temperature.toFloat(), message.humidity.toFloat())
+                if (message.status != "ERROR") ThermometerDetails(
+                    message.temperature.toFloat(),
+                    message.humidity.toFloat(),
+                    message.status
+                ) else GeneralDetails(message.status, null)
             )
         )
     }

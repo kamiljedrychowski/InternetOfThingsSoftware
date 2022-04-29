@@ -10,13 +10,13 @@ import java.util.*
 @FeignClient("statusManager")
 interface StatusManagerFeignClient {
 
-    @GetMapping
+    @GetMapping("/status")
     fun getAllStatuses(): ResponseEntity<List<StatusDto>>
 
-    @GetMapping("/{deviceUuid}")
+    @GetMapping("/status/{deviceUuid}")
     fun getAllStatusesByDevice(@PathVariable deviceUuid: UUID): ResponseEntity<List<StatusDto>>
 
-    @GetMapping("/last/{deviceUuid}")
+    @GetMapping("/status/last/{deviceUuid}")
     fun getLastStatusByDevice(@PathVariable deviceUuid: UUID): ResponseEntity<StatusDto>
 
 }
