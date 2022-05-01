@@ -27,7 +27,7 @@ class DeviceService(
             LOGGER.error("DeviceDto is invalid $deviceDto")
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build()
         }
-        val deviceByAddress = deviceRepository.findDeviceByAddressAndDeletedIsFalse(deviceDto.address!!)
+        val deviceByAddress = deviceRepository.findDeviceByAddressAndPortAndDeletedIsFalse(deviceDto.address!!, deviceDto.port!!)
         if (deviceByAddress != null) {
             LOGGER.error("Device with this address already exists: $deviceDto")
             return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).build()

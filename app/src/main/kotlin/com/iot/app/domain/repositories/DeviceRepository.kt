@@ -10,7 +10,7 @@ import java.util.*
 interface DeviceRepository : JpaRepository<Device, Long> {
     fun findDeviceByIdAndDeletedIsFalse(id: Long): Optional<Device>
 
-    fun findDeviceByAddressAndDeletedIsFalse(address: String) :Device?
+    fun findDeviceByAddressAndPortAndDeletedIsFalse(address: String, port: Int) :Device?
 
     fun findAllByDeletedIsFalseOrderByName(): List<Device>
 
